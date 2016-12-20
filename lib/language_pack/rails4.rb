@@ -58,6 +58,10 @@ WARNING
     end
   end
 
+  def slugignore
+    ["public/assets/**/*.{png,jpg}", "app/assets/images/{sports,teams,users}/**/*.{png,jpg}"]
+  end
+
   def public_assets_folder
     "public/assets"
   end
@@ -92,6 +96,7 @@ WARNING
           rake.task("assets:clean").invoke(env: rake_env)
 
           cleanup_assets_cache
+          FileUtils.rm_rf(Dir.glob(slugignore))
           @cache.store public_assets_folder
           @cache.store default_assets_cache
         else
