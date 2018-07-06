@@ -75,6 +75,8 @@ WARNING
       log("assets_precompile") do
         if Dir.glob("public/assets/{.sprockets-manifest-*.json,manifest-*.json}", File::FNM_DOTMATCH).any?
           puts "Detected manifest file, assuming assets were compiled locally"
+          puts "Cleaning assets to minimize slug size"
+          FileUtils.rm_rf(Dir.glob(slugignore))
           return true
         end
 
@@ -96,6 +98,7 @@ WARNING
           rake.task("assets:clean").invoke(env: rake_env)
 
           cleanup_assets_cache
+          puts "Cleaning assets to minimize slug size"
           FileUtils.rm_rf(Dir.glob(slugignore))
           @cache.store public_assets_folder
           @cache.store default_assets_cache
